@@ -1,3 +1,4 @@
 [submodule "8bitdev"]
 	path = 8bitdev
 	url = git@github.com:0cjs/8bitdev.git
+	branch = dev/cjs/20m25/cmt-bytestream
