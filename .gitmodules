@@ -1,0 +1,3 @@
+[submodule "8bitdev"]
+	path = 8bitdev
+	url = git@github.com:0cjs/8bitdev.git
