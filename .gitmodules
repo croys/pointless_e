@@ -1,4 +1,15 @@
-[submodule "8bitdev"]
-	path = 8bitdev
-	url = git@github.com:0cjs/8bitdev.git
-	branch = dev/cjs/20m25/cmt-bytestream
+[submodule "cjs8bitdev"]
+    path = cjs8bitdev
+    url = https://github.com/0cjs/8bitdev.git
+    branch = dev/cjs/20m25/cmt-bytestream
+
+#   This fetches via submodules via HTTPS so that no authentication is
+#   required. Pushes will still need to use SSH; this can be set individual
+#   for this copy of the repo or done in a generic way for all GitHub repos
+#   with the following in your ~/.gitconfig:
+#
+#       [url "git@github.com.:"]
+#           pushInsteadOf = https://github.com/
+#
+#   (Note the period at the end of the hostname; this ensures that the DNS
+#   resolver will not add local suffixes to it.)

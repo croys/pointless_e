@@ -1,0 +1,6 @@
+#   Required by b8tool
+requests
+pytest < 6.0
+py65
+
+#   Local requirements

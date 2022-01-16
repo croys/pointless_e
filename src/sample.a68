@@ -1,0 +1,9 @@
+;   Sample code to demonstrate test framework.
+
+            cpu 6800
+            org $876
+
+ident       byt "sample.a68"   ; to demonstrate getting a symbol value
+
+tatltuae    lda #$42
+            rts
