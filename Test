@@ -15,11 +15,11 @@ check_submodules() {
 #   Main
 
 export B8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
-b8tool="$B8_PROJDIR/8bitdev/b8tool/bin/b8tool"
+b8tool="$B8_PROJDIR/cjs8bitdev/b8tool/bin/b8tool"
 
 cd "$B8_PROJDIR"
 check_submodules
-. 8bitdev/pactivate -B $B8_PROJDIR -q
+. cjs8bitdev/pactivate -B $B8_PROJDIR -q
 
 $b8tool buildtoolset asl
 

@@ -1,7 +1,7 @@
-[submodule "8bitdev"]
-	path = 8bitdev
-	url = https://github.com/0cjs/8bitdev.git
-	branch = dev/cjs/20m25/cmt-bytestream
+[submodule "cjs8bitdev"]
+    path = cjs8bitdev
+    url = https://github.com/0cjs/8bitdev.git
+    branch = dev/cjs/20m25/cmt-bytestream
 
 #   This fetches via submodules via HTTPS so that no authentication is
 #   required. Pushes will still need to use SSH; this can be set individual

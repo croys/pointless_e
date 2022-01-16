@@ -1,0 +1,14 @@
+object_files = 'src/sample.p'
+
+from    testmc.mc6800  import  Machine
+R = Machine.Registers
+
+def test_ident(m, S):
+    ' Look up a symbol and read data at that location'
+    expected = b'sample.a68'
+    assert expected == m.bytes(S.ident, len(expected))
+
+def test_call(m, S):
+    ' Call some code. '
+    m.call(S.tatltuae, R(a=0xED))
+    assert R(a=0x42) == m.regs
