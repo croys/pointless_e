@@ -1,0 +1,11 @@
+            cpu 6800
+
+            include "src/mc68/std.a68"
+            include "src/jr200/bios.a68"
+
+E           equ $2000
+
+            org $1000
+
+            include "src/mc68/e8_6800.a68"
+
