@@ -5,8 +5,8 @@ PCOUNT: .byte 1
 E       = $8000
 NUMPAG  = 4
 N       = 970
-;NUMPAG  = 1
-;N       = 301
+; NUMPAG  = 1
+; N       = 301
 ; N       = 64
 ;  N       = 2
 ; NL      = .LOBYTE(N)
@@ -79,3 +79,63 @@ NXTDVR2:    dec NLREF1+1
             ora NHREF1+1
             bne _nxt_dvsr
             rts
+
+
+; Mmultiply by 100 for display
+
+; Initialisation
+
+PRODLO          = $7100
+PRODHI          = $7200
+
+LASTPAG         = (E / 256) + NUMPAG - 1
+;LASTPAG         = $80
+
+.export _as_mul_res
+_as_mul_res:    .byte 1
+
+.export _as_mul_init
+_as_mul_init:
+                lda #0
+                tax
+                tay
+PRODGEN:        sta PRODLO,Y
+                pha
+                txa
+                sta PRODHI,Y
+                pla
+                clc
+                adc #100
+                bcc nxtprod
+                inx
+nxtprod:        iny
+                bne PRODGEN
+                rts
+
+; multiplication main routine
+
+.export _as_mul
+_as_mul:
+                lda #NUMPAG
+                sta PCOUNT
+                lda #LASTPAG
+                sta MULT1+2
+                sta MULT2+2
+                ldy #0
+                ldx #0
+                clc
+MULBYT:         lda PRODHI,X
+                dey
+MULT1:          ldx E,Y
+                adc PRODLO,X
+MULT2:          sta E,Y
+                tya
+                bne MULBYT
+                dec MULT1+2
+                dec MULT2+2
+                dec PCOUNT
+                bne MULBYT
+                adc PRODHI,X
+                sta _as_mul_res
+                rts
+

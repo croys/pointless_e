@@ -13,6 +13,10 @@ extern void init_e_calc();
 extern void nxt_dvsr();
 extern uint8_t* asm_e;
 
+extern void as_mul_init();
+extern void as_mul();
+extern uint8_t as_mul_res;
+
 // extern uint16_t e_sz;
 // extern uint8_t  efrac[];
 // extern uint8_t  term[];
@@ -191,6 +195,32 @@ void print_bignum( big_num* a, size_t n_digits, big_num* tmp )
     }
 }
 
+void print_bignum_asm( big_num* a, size_t n_digits )
+{
+    const size_t n = n_digits / 2;
+    size_t i;
+
+    for ( i = 0; i < n; ++i )
+    {
+        uint8_t ov;
+        as_mul();
+        ov = as_mul_res;
+        printf( "%c%c", _tens[ ov ], _units[ ov ] );
+    }
+
+}
+
+void print_bignum_hex( big_num* a )
+{
+    const size_t n = a->size;
+    size_t i;
+
+    for( i = 0; i<n; ++i )
+    {
+        printf( "%02x", a->data[i] );
+    }
+    printf("\n");
+}
 
 static clock_t _clk;
 void timer_reset()
@@ -306,13 +336,22 @@ int main( void )
     // printf( "ok\n" );
 
 
-    printf( "Initialising... " );
+    printf( "Init:mul table (C)..." );
     timer_reset();
     init_mul100_tbl();
+    t = timer_elapsed();
+    printf( "done,tm: %lu\n", t );
+    printf( "Init:mul table (asm)..." );
+    timer_reset();
+    as_mul_init();
+    t = timer_elapsed();
+    printf( "done,tm: %lu\n", t );
+
+    printf( "Init:other..." );
     init_to_str2();
     init_e_calc();
     t = timer_elapsed();
-    printf( "done, time: %lu\n", t );
+    printf( "done,tm: %lu\n", t );
     
 #if 0
     // Initialise e_frac to 0.5
@@ -368,21 +407,58 @@ int main( void )
     //big_zero( &tmp );
 
     printf( "e addr: %x\n", asm_e );
+    printf( "as_mul_res: %x\n", as_mul_res );
 
     // printf( "e: 2." );
     // print_bignum( &efrac, n_digits, &tmp );
     // printf( "\n" );
 
-    printf( "Calculating e (asm)... " );
+    printf( "Calculating e (asm)..." );
     timer_reset();
     nxt_dvsr();
     t = timer_elapsed();
-    printf( "done, time: %lu\n", t );
+    printf( "done,tm: %lu\n", t );
 
+#if 1
+    timer_reset();
+    print_bignum_hex( &efrac );
+    t = timer_elapsed();
+    printf( "hex dump tm: %lu\n", t );
+#endif
+
+#if 0
+    printf( "e_frac[0]:%02x\n", efrac.data[0]);
+    timer_reset();
+    as_mul();
+    t = timer_elapsed();
+    printf( "one mul(asm) tm: %lu\n", t );
+    printf( "e_frac[0]:%02x\n", efrac.data[0]);
+    //print_bignum_hex( &efrac );
+
+    printf( "Ov: %02x\n", *as_mul_res );
+
+    for( i=0; i < 10; ++i )
+    {
+        int x;
+        as_mul();
+        //x = *as_mul_res;
+        x = efrac.data[0];
+        printf( "Ov: %02x\n", x );
+    }
+#endif
+
+#if 1
     printf( "e: 2.\n" );
+    timer_reset();
+#if 0
     print_bignum( &efrac, n_digits, &tmp );
+#else
+    print_bignum_asm( &efrac, n_digits );
+#endif
+    t = timer_elapsed();
     printf( "\n" );
-
+    printf( "printing tm: %lu\n", t );
+#endif
     return EXIT_SUCCESS;
 }
 
