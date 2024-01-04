@@ -1,1 +1,1 @@
-from cjs8bitdev.src.conftest import *
+from testmc.conftest import *

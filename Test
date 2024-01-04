@@ -15,13 +15,16 @@ check_submodules() {
 #   Main
 
 export B8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
-b8tool="$B8_PROJDIR/cjs8bitdev/b8tool/bin/b8tool"
+echo "B8_PROJDIR=${B8_PROJDIR}"
+t8dev="$B8_PROJDIR/t8dev/bin/t8dev"
+echo "t8dev=${t8dev}"
 
 cd "$B8_PROJDIR"
 check_submodules
-. cjs8bitdev/pactivate -B $B8_PROJDIR -q
+#. t8dev/pactivate -B $B8_PROJDIR -q
+. t8dev/pactivate -B $B8_PROJDIR
 
-$b8tool buildtoolset asl
+$t8dev buildtoolset asl
 
 ####################################################################
 #   XXX It would be nice to be able here to build the unit test versions of
@@ -75,7 +78,12 @@ $b8tool buildtoolset asl
 #
 ####################################################################
 
-$b8tool aslauto src/
-$b8tool asl exe/jr200/hello.a68
+$t8dev aslauto src/
+manual_build=(
+    #   Top-level programs whose build is not triggered by automated tests.
+    src/tmc68/bioscode.a68
+    exe/jr200/hello.a68
+)
+$t8dev asl "${manual_build[@]}"
 
-$b8tool pytest -- "$@"
+$t8dev pytest -- "$@"
