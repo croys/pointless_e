@@ -83,6 +83,7 @@ manual_build=(
     #   Top-level programs whose build is not triggered by automated tests.
     src/tmc68/bioscode.a68
     exe/jr200/hello.a68
+    exe/tmc68/hello.a68
 )
 $t8dev asl "${manual_build[@]}"
 
