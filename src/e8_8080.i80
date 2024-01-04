@@ -1,0 +1,8 @@
+;   Essentially a spike test for the upcoming 8080 simulator.
+
+                relaxed on              ; accept $hhhh syntax too
+                cpu  8080
+                z80syntax exclusive     ; do not accept 8080 syntax
+
+start           ld   a,$55
+                ret

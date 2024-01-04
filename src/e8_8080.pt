@@ -1,0 +1,8 @@
+object_files = 'src/e8_8080.p'
+
+from    testmc.i8080  import  Machine
+R = Machine.Registers
+
+def test_start(m, S, R):
+    m.call(S.start, R(a=0xFD))
+    assert R(a=0x55) == m.regs
