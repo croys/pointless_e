@@ -21,8 +21,7 @@ echo "t8dev=${t8dev}"
 
 cd "$B8_PROJDIR"
 check_submodules
-#. t8dev/pactivate -B $B8_PROJDIR -q
-. t8dev/pactivate -B $B8_PROJDIR
+. t8dev/pactivate -q -B $B8_PROJDIR
 
 $t8dev buildtoolset asl
 
