@@ -1,27 +1,15 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
 
-warn() { echo 1>&2 "$@"; }
-
-check_submodules() {
-    count=$(git submodule status --recursive | sed -n -e '/^[^ ]/p' | wc -l)
-    [ $count -eq 0 ] || {
-        warn "$count Git submodules are not up to date:" \
-            'Run `git submodule update --init`?'
-    }
-}
-
 ####################################################################
-#   Main
+#   Project Setup
 
-export B8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
-echo "B8_PROJDIR=${B8_PROJDIR}"
-t8dev="$B8_PROJDIR/t8dev/bin/t8dev"
+export T8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
+echo "T8_PROJDIR=${T8_PROJDIR}"
+. "$T8_PROJDIR"/t8dev/project-setup.bash
+
+t8dev="$T8_PROJDIR/t8dev/bin/t8dev"
 echo "t8dev=${t8dev}"
-
-cd "$B8_PROJDIR"
-check_submodules
-. t8dev/pactivate -q -B $B8_PROJDIR
 
 $t8dev buildtoolset asl
 
@@ -33,15 +21,15 @@ $t8dev buildtoolset asl
 #      is in the Python import search path so they can import common test
 #      code. This is true when building with 8bitdev/ as the project
 #      directory, but not with a different project directory. This could be
-#      hacked in with `export PYTHONPATH=$B8_PROJDIR/8bitdev/`,
+#      hacked in with `export PYTHONPATH=$T8_PROJDIR/8bitdev/`,
 #      though that may not be the best solution.
 #   2. The tests specify the object files to be built and loaded using
 #      paths that implicitly give the source file relative to 8bitdev/,
 #      e.g. `src/mc68/simple.p` However, here they are relative to
-#      $B8_PROJDIR, e.g. `$B8_PROJDIR/8bitdev/src/mc68/simple.a65`. It's
+#      $T8_PROJDIR, e.g. `$T8_PROJDIR/8bitdev/src/mc68/simple.a65`. It's
 #      not clear if it's worth trying to change the system to handle things
 #      being built from different locations due to different settings of
-#      $B8_PROJDIR.
+#      $T8_PROJDIR.
 #   For the moment, at least, we just assume that everything under 8bitdev/
 #   is already tested and working and have our programs here include this
 #   presumably-tested-and-working source.
@@ -52,7 +40,7 @@ $t8dev buildtoolset asl
 #   $BUILD/obj/src/tmc68/bioscode.p along with whatever object file the
 #   user wants to run. We can't even build 8bitdev/src/tmc68/bioscode.a65
 #   because it includes `src/tmc68/bios.a68`, which is actually under
-#   $B8_PROJDIR/8bitdev/, not $B8_PROJDIR/, and so is not in the ASL
+#   $T8_PROJDIR/8bitdev/, not $T8_PROJDIR/, and so is not in the ASL
 #   include search path.
 #
 #   One part of the solution may be to have a way of specifying additional
