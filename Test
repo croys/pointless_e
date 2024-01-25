@@ -6,9 +6,12 @@ set -eu -o pipefail
 
 export T8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
 echo "T8_PROJDIR=${T8_PROJDIR}"
-. "$T8_PROJDIR"/t8dev/project-setup.bash
+t8dir=t8dev
+[[ -r $T8_PROJDIR/$t8dir/t8setup.bash ]] \
+    || git submodule update --init "$T8_PROJDIR/$t8dir"
+. "$T8_PROJDIR"/$t8dir/t8setup.bash
 
-t8dev="$T8_PROJDIR/t8dev/bin/t8dev"
+t8dev="$T8_PROJDIR/$t8dir/bin/t8dev"
 echo "t8dev=${t8dev}"
 
 $t8dev buildtoolset asl

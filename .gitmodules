@@ -1,3 +1,6 @@
 [submodule "t8dev"]
 	path = t8dev
 	url = https://github.com/mc68-net/t8dev.git
+[submodule "r8format"]
+	path = r8format
+	url = https://github.com/mc68-net/r8format.git
