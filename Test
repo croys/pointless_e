@@ -3,27 +3,16 @@ set -eu -o pipefail
 
 warn() { echo 1>&2 "$@"; }
 
-check_submodules() {
-    count=$(git submodule status --recursive | sed -n -e '/^[^ ]/p' | wc -l)
-    [ $count -eq 0 ] || {
-        warn "$count Git submodules are not up to date:" \
-            'Run `git submodule update --init`?'
-    }
-}
-
 ####################################################################
 #   Main
 
-export B8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
-echo "B8_PROJDIR=${B8_PROJDIR}"
-t8dev="$B8_PROJDIR/t8dev/bin/t8dev"
-echo "t8dev=${t8dev}"
+export T8_PROJDIR=$(cd "$(dirname "$0")" && pwd -P)
+t8dir=t8dev    # or whatever your submodule path is
+[[ -r $T8_PROJDIR/$t8dir/t8setup.bash ]] \
+    || git submodule update --init "$T8_PROJDIR/$t8dir"
+. "$T8_PROJDIR"/$t8dir/t8setup.bash
 
-cd "$B8_PROJDIR"
-check_submodules
-. t8dev/pactivate -q -B $B8_PROJDIR
-
-$t8dev buildtoolset asl
+t8dev buildtoolset asl
 
 ####################################################################
 #   XXX It would be nice to be able here to build the unit test versions of
@@ -77,7 +66,7 @@ $t8dev buildtoolset asl
 #
 ####################################################################
 
-$t8dev aslauto src/
+t8dev aslauto src/
 manual_build=(
     #   Top-level programs whose build is not triggered by automated tests.
     src/tmc68/bioscode.a68
@@ -85,6 +74,6 @@ manual_build=(
     exe/tmc68/hello.a68
     exe/jr200/e_calc.a68
 )
-$t8dev asl "${manual_build[@]}"
+t8dev asl "${manual_build[@]}"
 
-$t8dev pytest -- "$@"
+t8dev pytest -- "$@"
