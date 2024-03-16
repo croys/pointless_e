@@ -1,6 +1,6 @@
 #   Required by b8tool
 requests
-pytest < 6.0
+pytest
 py65@git+https://github.com/mnaberez/py65.git
 
 #   Local requirements
