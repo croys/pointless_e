@@ -1,0 +1,13 @@
+;
+;   std.i80 - Standard 8080/8085/Z80 common definitions
+;
+
+            relaxed on
+            z80syntax exclusive
+
+;--------------------------------------------------------------------------
+;   LB(), MB(): Low and middle bytes of an assembler value
+;   These are the same on every architecture (so yes, code duplication).
+
+LB          function addr,(addr & $FF)
+MB          function addr,((addr & $FF00) >> 8)

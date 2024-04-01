@@ -1,0 +1,10 @@
+
+
+; A1 - lower byte for all arithmetic operations.
+
+nxt_dvsr    ld a,1
+            ld (A1), a
+            ret
+
+A1          db 0
+E           ds 1024     ; XXX must be initialised to $00

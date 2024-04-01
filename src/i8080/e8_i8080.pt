@@ -1,0 +1,19 @@
+
+
+from    testmc.mc6800  import Machine
+from    testmc.i8080 import  Machine
+import  pytest
+
+#object_files = 'src/i8080/e8_i8080.p'
+
+test_rig = '''
+            cpu 8080
+            include src/i8080/std.i80
+            org $1000
+            include src/i8080/e8_i8080.i80
+'''
+
+def test_nxt_dvsr(m, R, S):
+    m.call(S.nxt_dvsr, R(a=0xEE))
+    assert ( R(a=1), 1              ) \
+        == ( m.regs, m.byte(S.A1)   )
