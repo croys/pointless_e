@@ -17,3 +17,14 @@ def test_nxt_dvsr(m, R, S):
     m.call(S.nxt_dvsr, R(a=0xEE))
     assert ( R(a=1), 1              ) \
         == ( m.regs, m.byte(S.A1)   )
+
+def test_mul_init(m, R, S):
+    m.deposit(S.MULTABLO, [0xDE]*0x100)
+    m.deposit(S.MULTABHI, [0xDD]*0x100)
+
+    m.call(S.mul_init, R(a=0xDE))
+
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO+0x100-4, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI+0x100-4, 4)
