@@ -78,6 +78,7 @@ manual_build=(
     exe/jr200/hello.a68
     exe/tmc68/hello.a68
     exe/jr200/e_calc.a68
+    exe/tk85/e_calc.i80
 )
 t8dev asl "${manual_build[@]}"
 

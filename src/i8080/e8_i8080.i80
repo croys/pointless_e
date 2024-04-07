@@ -1,43 +1,28 @@
 
+; Following must be defined:
+;
+; E         equ:    address of digits of E
+;                   - must be on page boundary
+; SZ        equ:    size of digits of E
+; N         equ:    number of terms
+;
 
 ; A1 - lower byte for all arithmetic operations.
+
+_init_e_calc:
+; zero memory - initialise E to all $00
+                xor a
+                ld bc, SZ
+                ld hl, E_ARRAY
+.zloop:         ld (hl), a
+                inc hl
+                dec bc
+                jp nz, .zloop
 
 nxt_dvsr        ld a,1
                 ld (A1), a
                 ret
 
+
 A1              db 0
-E               ds $2000     ; XXX must be initialised to $00, move to main
-SZ              equ 256
-N               dw 301
 
-
-; Multiply by 100 via tables
-
-
-; Initialisation
-mul_init        xor a
-                ld b,a
-                ld c,a
-                ld e,a
-_mul_init_1     ld hl, MULTABLO
-                ld (hl), c
-                ld hl, MULTABHI
-                ld (hl), b
-                ld a,c
-                add a, 100
-                jp nc, _mul_init_nc
-                inc b
-_mul_init_nc    ld c,a
-                dec e
-                jp nz, _mul_init_1
-                ret
-
-; multiplication main routine
-
-mul100:
-                ret
-
-
-MULTABLO equ $7100
-MULTABHI equ $7200
