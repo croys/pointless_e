@@ -1,0 +1,18 @@
+;   Test sample for Commodore +4
+;
+            cpu 6502
+            include "src/mos65/std.a65"
+;            include "cjs8bitdev/src/mos65/std.a65"
+
+START       = $4000
+
+; Commodore header
+            org START-2
+            dw  START
+            org START
+
+            ;include "cjs8bitdev/src/c64/bios.a65"
+            ;include "cjs8bitdev/src/mos65/hello.a65"
+            include "src/mos65/sample.a65"
+            brk
+

@@ -1,0 +1,9 @@
+;   Sample code to demonstrate test framework.
+
+            cpu 6502
+
+            jmp main
+val:        db  $00
+main:
+            lda #$ee
+            sta val

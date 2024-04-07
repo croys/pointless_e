@@ -1,0 +1,39 @@
+            cpu 6502
+
+            include "src/mos65/std.a65"
+;            include "cjs8bitdev/src/mos65/std.a65"
+;            include "cjs8bitdev/src/c64/bios.a68"
+
+E           = $5000
+; NUMPAG      = 4
+; N           = 970
+NUMPAG      = 1
+N           = 301
+
+PRODLO      = $4E00
+PRODHI      = $4F00
+
+START       = $4000
+
+; Commodore header
+            org START-2
+            dw  START
+            org START
+
+            ; Note: Can prefix jump vector table here
+            ; might also want to only have vector table here once
+            ; code is modularised
+
+; Note: definitely want jump table here, as want Plus 4 specific stuff,
+; like mapping in RAM to top 32K
+;
+;
+; Note: MONITOR will map ROM from $8000 onwards by default
+;
+; Need to set $7f8 to $80 to view RAM
+; this is TEDMON specific, the system RAM/ROM mapping is separate
+
+; Might need to have jmp table here, so we can page out ROM
+
+            include "src/mos65/e8_6502.a65"
+

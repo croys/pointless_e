@@ -1,0 +1,31 @@
+;   MC6502 "Hello, world."
+;
+;   This also tests input, reading and echoing what you type and
+;   re-printing the greeting on every CR. ^C will "exit" to an invalid
+;   opcode which should abort in a simulator; if it doesn't abort (as it
+;   wouldn't on real hardware) the program goes into an infinite loop.
+
+hello       jsr prnl
+            jsr prstr
+.nextchar   jsr rdchar
+            cmp #$03                ; Ctrl-C exits
+            beq .exit
+            cmp #$0D                ; CR prints hello again
+            beq hello
+            jsr prchar              ; echo char
+            jmp .nextchar
+
+.exit       jsr prnl                ; output starts on new line
+            rts
+
+; FIXME: work out how to use PETSCII by default
+;message     db  "Hello: \0"
+message     db  "hELLO: \0"
+
+prstr       ldx #0
+.nextchar   lda message,X
+            beq .done
+            jsr prchar
+            inx
+            jmp .nextchar
+.done       rts

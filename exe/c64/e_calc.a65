@@ -1,0 +1,30 @@
+            cpu 6502
+
+            include "src/mos65/std.a65"
+;            include "cjs8bitdev/src/mos65/std.a65"
+;            include "cjs8bitdev/src/c64/bios.a68"
+
+E           = $4000
+; NUMPAG      = 4
+; N           = 970
+NUMPAG      = 1
+N           = 301
+
+PRODLO      = $3100
+PRODHI      = $3200
+
+START       = $1000
+
+; Commodore header
+            org START-2
+            dw  START
+            org START
+
+            ; Note: Can prefix jump vector table here
+            ; might also want to only have vector table here once
+            ; code is modularised
+
+; Might need to have jmp table here, so we can page out ROM
+
+            include "src/mos65/e8_6502.a65"
+

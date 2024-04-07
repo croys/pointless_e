@@ -1,0 +1,33 @@
+;   "Hello, world" for Commodore Plus 4
+;
+            cpu 6502
+;            include "cjs8bitdev/src/mos65/std.a65"
+            include "src/mos65/std.a65"
+
+START       = $4000
+
+CINT        = $FF81
+GETIN       = $FFE4
+BSOUT       = $FFD2
+
+; Commodore header
+            org START-2
+            dw  START
+            org START
+            ;include "cjs8bitdev/src/c64/bios.a65"
+            ;include "cjs8bitdev/src/mos65/hello.a65"
+
+            jmp main
+
+; "BIOS"
+rdchar:     jmp GETIN
+prchar:     jmp BSOUT
+prnl:       lda #$0D
+            jmp prchar
+
+main:
+            jsr hello
+            brk
+
+            include "src/mos65/hello.a65"
+;            end hello

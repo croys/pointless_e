@@ -69,6 +69,11 @@ t8dev buildtoolset asl
 t8dev aslauto src/
 manual_build=(
     #   Top-level programs whose build is not triggered by automated tests.
+    exe/c64/hello.a65
+    exe/c64/e_calc.a65
+    exe/plus4/hello.a65
+    exe/plus4/e_calc.a65
+    exe/plus4/sample.a65
     src/tmc68/bioscode.a68
     exe/jr200/hello.a68
     exe/tmc68/hello.a68
