@@ -1,22 +1,24 @@
 
 ; Following must be defined:
 ;
-; E         equ:    address of digits of E
+; E_ARRAY   equ:    address of digits of E
 ;                   - must be on page boundary
 ; SZ        equ:    size of digits of E
-; N         equ:    number of terms
+; NTERMS    equ:    number of terms
 ;
 
 ; A1 - lower byte for all arithmetic operations.
 
 _init_e_calc:
 ; zero memory - initialise E to all $00
-                xor a
+                ld d, 0
                 ld bc, SZ
                 ld hl, E_ARRAY
-.zloop:         ld (hl), a
+.zloop:         ld (hl), d
                 inc hl
                 dec bc
+                ld a,b
+                and a,c
                 jp nz, .zloop
 
 nxt_dvsr        ld a,1
