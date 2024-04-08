@@ -6,12 +6,17 @@ import  pytest
 test_rig = '''
             cpu 8080
             include src/i8080/std.i80
+
 E_ARRAY     equ $2000
-SZ          equ 256
-NTERMS      equ 301
+SZ          equ 4
+NTERMS      equ 6
+
             org $1000
             include src/i8080/e8_i8080.i80
 '''
+
+def test__init_e_calc(m, S):
+    m.call(S._init_e_calc)
 
 def test_nxt_dvsr(m, R, S):
     m.call(S.nxt_dvsr, R(a=0xEE))
