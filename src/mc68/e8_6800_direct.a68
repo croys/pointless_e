@@ -1,0 +1,98 @@
+;
+; Direct port of 6502 version
+;
+
+            bra start
+
+A1          byt  0
+PCOUNT      byt  1
+;NUMPAG      equ 4
+;N           equ 970
+NUMPAG      equ 1
+N           equ 301
+;NUMPAG      equ 1
+;N           equ 64
+NL          equ LB(N)
+NH          equ MB(N)
+
+start       ldaa #NH
+            staa nhref1+1
+            staa nhref2+1
+            ldaa #NL
+            staa nlref1+1
+            staa nlref2+1
+            ; clear E
+            ldaa    #0
+            ldx     #E
+            ldab    #0
+clre_1      pshb
+            ldab    #0
+clre_2      staa    ,x
+            inx
+            incb
+            cmpb    #0
+            bne     clre_2
+            pulb
+            incb
+            cmpb    #NUMPAG
+            bne     clre_1
+;            rts
+
+nxt_dvsr    ldaa #NUMPAG
+            staa PCOUNT
+            ldaa #1
+            staa A1
+            ldaa #MB(E)
+            staa eref1+1
+            staa eref2+1
+            ldaa #0         ; 6800 has CLR A
+            staa eref1+2
+            staa eref2+2
+nxtbyte     ldab #8
+eref1       asl E
+nxtbit      rol A1
+            rola
+nhref1      cmpa #NH
+            bcs eref2
+            bne replace
+            psha
+            ldaa A1
+nlref1      cmpa #NL
+            pula
+            bcs eref2
+replace     psha
+            ldaa A1
+;nlref2      sbca #NL
+            clc
+nlref2      sbca #NL
+            staa A1
+            pula
+nhref2      sbca  #NH
+eref2       rol E ; carry from previous sbc is opposite to 6502
+            decb
+            ; cmpb #0
+            bne nxtbit
+            inc eref1+2
+            inc eref2+2
+            ; pshb
+            ; ldab eref1+2 ; set flags
+            ; pulb
+            bne nxtbyte
+            inc eref1+1
+            inc eref2+1
+            dec PCOUNT
+            ; pshb
+            ; ldab PCOUNT ; set flags
+            ; pulb
+            bne nxtbyte
+            ldaa nlref1+1
+            bne nxtdvr2
+            dec nhref1+1
+            dec nhref2+1
+nxtdvr2     dec nlref1+1
+            dec nlref2+1
+            ldaa nlref1+1
+            lsra
+            oraa nhref1+1
+            bne nxt_dvsr
+            rts
