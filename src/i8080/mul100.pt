@@ -1,0 +1,27 @@
+from    testmc.i8080 import  Machine
+import  pytest
+
+#object_files = 'src/i8080/mul100.p'
+
+test_rig = '''
+            cpu 8080
+            include src/i8080/std.i80
+E_ARRAY     equ $2000
+SZ          equ 256
+MULTABLO    equ $7100
+MULTABHI    equ $7200
+            org $1000
+            include src/i8080/mul100.i80
+'''
+
+@pytest.mark.xfail(strict=True)
+def test_mul_init(m, R, S):
+    m.deposit(S.MULTABLO, [0xDE]*0x100)
+    m.deposit(S.MULTABHI, [0xDD]*0x100)
+
+    m.call(S.mul_init, R(a=0xDE))
+
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO+0x100-4, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI, 4)
+    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI+0x100-4, 4)

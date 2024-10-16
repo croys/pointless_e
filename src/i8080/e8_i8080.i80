@@ -1,0 +1,54 @@
+
+; Following must be defined:
+;
+; E_ARRAY   equ:    address of digits of E
+;                   - must be on page boundary
+; SZ        equ:    size of digits of E
+; NTERMS    equ:    number of terms
+;
+
+; A1 - lower byte for all arithmetic operations.
+
+_init_e_calc:
+; zero memory - initialise E to all $00
+                ld d, 0
+                ld bc, SZ
+                ld hl, E_ARRAY
+.zloop:         ld (hl), d
+                inc hl
+                dec bc
+                ld a,b
+                and a,c
+                jp nz, .zloop
+; hl - pointer into E_ARRAY
+; bc - count down from SZ
+; store divisor in bc/de?
+; 16 bit rotates and compares?
+nxt_dvsr        ld a,1
+                ld (A1), a
+                ld hl, E_ARRAY
+                xor a
+                ld e, a
+                ld d, 8
+                ld a,(hl)
+                ccf
+                rlca
+                ld (hl),a
+                ld a,(A1)
+                rlca
+                ld (A1),a
+                ld a, e
+                rlca
+                ld e, a
+
+                ;rlca
+                ;sla (hl)
+                ;sl a
+                ;rl a
+                ;rl A1
+                ;rl a
+                ret
+
+
+A1              db 0
+

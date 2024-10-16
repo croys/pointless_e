@@ -1,0 +1,12 @@
+            cpu 8080
+            include src/i8080/std.i80
+            org $8000
+
+E_ARRAY     equ $8100
+SZ          equ 256
+NTERMS      equ 301
+
+            org $8000
+
+            include "src/i8080/e8_i8080.i80"
+
