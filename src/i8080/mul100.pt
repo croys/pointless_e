@@ -14,14 +14,13 @@ MULTABHI    equ $7200
             include src/i8080/mul100.i80
 '''
 
-@pytest.mark.xfail(strict=True)
 def test_mul_init(m, R, S):
     m.deposit(S.MULTABLO, [0xDE]*0x100)
     m.deposit(S.MULTABHI, [0xDD]*0x100)
 
     m.call(S.mul_init, R(a=0xDE))
 
-    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO, 4)
-    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABLO+0x100-4, 4)
-    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI, 4)
-    assert b'\xDE\xDE\xDE\xDE' == m.bytes(S.MULTABHI+0x100-4, 4)
+    mul = lambda idx: int(m.byte(S.MULTABLO+idx)) + 0x100 * int(m.byte(S.MULTABHI+idx))
+
+    assert  (mul(0), mul(1), mul(2), mul(3), mul(255)) == \
+            (0     , 100   , 200   , 300   , 25500   )

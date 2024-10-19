@@ -17,6 +17,8 @@ NTERMS      equ 6
 
 def test__init_e_calc(m, S):
     m.call(S._init_e_calc)
+    assert m.bytes(S.E_ARRAY, 4) == b'\x00\x00\x00\x00'
+    assert m.bytes(S.E_ARRAY+0x100-4, 4) == b'\x00\x00\x00\x00'
 
 @pytest.mark.xfail(strict=True)
 def test_nxt_dvsr(m, R, S):
