@@ -11,7 +11,6 @@
 mul_init        xor a
                 ld b,a
                 ld c,a
-                ld e,a
                 ld l,a
 _mul_init_1     ld h, MB(MULTABLO)
                 ld (hl), c
@@ -23,7 +22,6 @@ _mul_init_1     ld h, MB(MULTABLO)
                 inc b
 _mul_init_nc    ld c,a
                 inc l
-                dec e
                 jp nz, _mul_init_1
                 ret
 
